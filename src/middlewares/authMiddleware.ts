@@ -13,7 +13,9 @@ declare global {
     }
 }
 
-export const protect = async (req: Request, next: NextFunction) => {
+export const protect = async (req: Request,res:Response, next: NextFunction) => {
+    console.log(res.ok)
+    
     try {
         // 1) Getting token and check if it's there
         let token;
