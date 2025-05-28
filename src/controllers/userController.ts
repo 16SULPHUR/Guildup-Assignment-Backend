@@ -1,4 +1,4 @@
-// src/controllers/userController.ts
+
 import { Request, Response } from 'express';
 import * as userService from '../services/userService.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';

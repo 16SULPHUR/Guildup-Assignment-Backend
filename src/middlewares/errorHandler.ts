@@ -1,4 +1,4 @@
-// src/middlewares/errorHandler.ts
+
 import { Request, Response } from 'express';
 import { AppError } from '../utils/AppError.js';
 

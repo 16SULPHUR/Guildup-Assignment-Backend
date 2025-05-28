@@ -1,4 +1,4 @@
-// src/routes/packageRoutes.ts
+
 import express from 'express';
 import * as packageController from '../controllers/packageController.js';
 import { validateRequest } from '../middlewares/validateRequest.js';

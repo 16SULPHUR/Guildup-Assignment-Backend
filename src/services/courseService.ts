@@ -1,4 +1,4 @@
-// src/services/courseService.ts
+
 import Course, { ICourse } from '../models/Course.js';
 import User from '../models/User.js';
 import { AppError } from '../utils/AppError.js';

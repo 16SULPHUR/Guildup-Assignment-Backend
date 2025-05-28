@@ -1,4 +1,4 @@
-// src/controllers/authController.ts
+
 import { Request, Response } from 'express';
 import User from '../models/User.js';
 import { AppError } from '../utils/AppError.js';

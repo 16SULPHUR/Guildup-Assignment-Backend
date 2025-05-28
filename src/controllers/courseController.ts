@@ -1,10 +1,10 @@
-// src/controllers/courseController.ts
+
 import { Request, Response } from 'express';
 import * as courseService from '../services/courseService.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { AppError } from '../utils/AppError.js';
 import { ICourse } from '../models/Course.js';
-import { getLocalizedPrice } from '../services/pricingService.js';
+import { getLocalizedPrice, LocalizedPriceInfo } from '../services/pricingService.js';
 
 export const createCourse = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) throw new AppError('Authentication required to create a course.', 401);
@@ -70,7 +70,22 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
 
 export const getMyCourses = asyncHandler(async (req: Request, res: Response) => {
     if (!req.user) throw new AppError('Authentication required.', 401);
-    // Assuming courseService.getCoursesByCreatorIdService exists or adapt getAllCoursesService
-    const courses = await courseService.getCoursesByCreatorIdService(req.user.id);
-    res.status(200).json({ status: 'success', results: courses.length, data: courses });
+
+    const coursesFromDB = await courseService.getCoursesByCreatorIdService(req.user.id);
+
+    const userLocation = req.query.location as string | undefined;
+
+    if (userLocation && coursesFromDB.length > 0) {
+        const processedCourses = await Promise.all(
+            coursesFromDB.map(async (courseDoc: ICourse) => {
+                const course = courseDoc.toObject ? courseDoc.toObject() : { ...courseDoc };
+                const localizedPriceInfo: LocalizedPriceInfo = await getLocalizedPrice(course.price, userLocation);
+                return { ...course, localizedPriceInfo };
+            })
+        );
+        return res.status(200).json({ status: 'success', results: processedCourses.length, data: processedCourses });
+    }
+
+    // If no location or no courses, return as is
+    res.status(200).json({ status: 'success', results: coursesFromDB.length, data: coursesFromDB });
 });

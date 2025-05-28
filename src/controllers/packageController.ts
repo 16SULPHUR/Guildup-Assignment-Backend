@@ -1,4 +1,4 @@
-// src/controllers/packageController.ts
+
 import { Request, Response } from 'express';
 import * as packageService from '../services/packageService.js';
 import { getLocalizedPrice, LocalizedPriceInfo } from '../services/pricingService.js'; // Correct import
@@ -12,7 +12,7 @@ async function getLocalizedPackageDetails(pkg: any, userLocation?: string) {
     let baseTotalPriceUSD = 0;
     if (packageObject.courses && Array.isArray(packageObject.courses)) {
         baseTotalPriceUSD = (packageObject.courses as ICourse[]).reduce((sum, course) => {
-            // Ensure course is an object with a price, not just an ObjectId if not populated correctly
+            
             const price = typeof course === 'object' && course !== null && 'price' in course ? (course as ICourse).price : 0;
             return sum + (price || 0);
         }, 0);

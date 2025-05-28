@@ -1,4 +1,4 @@
-// src/middlewares/asyncHandler.ts
+
 import { Request, Response, NextFunction } from 'express';
 
 type AsyncFunction = (req: Request, res: Response, next: NextFunction) => Promise<any>;

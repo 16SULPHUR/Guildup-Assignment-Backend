@@ -1,14 +1,13 @@
-// src/middlewares/authMiddleware.ts
+
 import { Request, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt.js';
 import { AppError } from '../utils/AppError.js';
-import User from '../models/User.js'; // To check if user still exists
+import User from '../models/User.js'; 
 
-// Extend Express Request type to include 'user'
 declare global {
     namespace Express {
         interface Request {
-            user?: { id: string }; // Or IUser if you fetch the full user object here
+            user?: { id: string };
         }
     }
 }

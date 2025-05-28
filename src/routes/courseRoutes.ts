@@ -1,4 +1,4 @@
-// src/routes/courseRoutes.ts
+
 import express from 'express';
 import * as courseController from '../controllers/courseController.js';
 import { validateRequest } from '../middlewares/validateRequest.js';

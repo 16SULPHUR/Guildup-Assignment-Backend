@@ -1,4 +1,4 @@
-// src/services/packageService.ts
+
 import Package, { IPackage } from '../models/Package.js';
 import Course, { ICourse } from '../models/Course.js'; // Ensure ICourse is imported if used for typing
 import User from '../models/User.js';

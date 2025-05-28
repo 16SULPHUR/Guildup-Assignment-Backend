@@ -1,4 +1,4 @@
-// src/lib/supabaseClient.ts
+
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import { EmailDocument } from '../types/email.js';
@@ -20,9 +20,7 @@ export async function checkIfEmailExists(
     account: string,
     fallbackUid?: number
   ): Promise<boolean> {
-    // ... your implementation ...
     if (!messageId && (!fallbackUid || fallbackUid <= 0)) {
-      // ...
       return false;
     }
     const uniqueIdentifier = getEmailUniqueIdentifier({ message_id: messageId, account, fallback_uid: fallbackUid });
