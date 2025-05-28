@@ -67,3 +67,10 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
     await courseService.deleteCourseService(req.params.courseId, req.user.id);
     res.status(204).json({ status: 'success', data: null });
 });
+
+export const getMyCourses = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) throw new AppError('Authentication required.', 401);
+    // Assuming courseService.getCoursesByCreatorIdService exists or adapt getAllCoursesService
+    const courses = await courseService.getCoursesByCreatorIdService(req.user.id);
+    res.status(200).json({ status: 'success', results: courses.length, data: courses });
+});

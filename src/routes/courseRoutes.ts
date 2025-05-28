@@ -8,6 +8,7 @@ const router = express.Router();
 
 // Public routes
 router.get('/', courseController.getAllCourses);
+router.get('/my-courses', protect, courseController.getMyCourses);
 router.get('/:courseId', validateRequest(courseIdParamSchema), courseController.getCourse);
 
 // Protected routes (require authentication)

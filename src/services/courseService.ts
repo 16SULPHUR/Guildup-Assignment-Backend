@@ -66,3 +66,9 @@ export const deleteCourseService = async (courseId: string, MongooseCreatorId: s
     }
     await Course.deleteOne({ courseId });
 };
+
+export const getCoursesByCreatorIdService = async (creatorMongooseId: string): Promise<ICourse[]> => {
+    return Course.find({ creatorId: creatorMongooseId })
+                 .sort({ createdAt: -1 }) // Optional: sort by newest
+                 .populate('creatorId', 'name email userId'); // Keep population consistent
+};
