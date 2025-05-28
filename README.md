@@ -1,6 +1,6 @@
 # Courseify Backend - Course Management System
 
-**Screenshots: https://drive.google.com/file/d/1NOks7B6YQbQvOEiinGog3MFM9MH4fh5i/view?usp=sharing**
+**Screenshots: https://drive.google.com/drive/folders/1UFcEqw8umFnBLrlZKILNHYxyK34mqu7H**
 
 **Backend Endpoint: https://courseify-eight.vercel.app/**
 
