@@ -10,6 +10,7 @@ const router = express.Router();
 
 // Public routes
 router.get('/', packageController.getAllPackages);
+router.get('/my-packages', protect, packageController.getMyPackages); 
 router.get('/:packageId', validateRequest(packageIdParamSchema), packageController.getPackageById);
 
 // Protected routes

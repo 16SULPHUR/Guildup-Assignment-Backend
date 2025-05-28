@@ -103,3 +103,13 @@ export const updatePackageService = async (
     Object.assign(pkg, updateData);
     return pkg.save();
 };
+
+export const getPackagesByCreatorIdService = async (
+    creatorMongooseId: string
+): Promise<(Omit<IPackage, "courses"> & { courses: ICourse[] })[]> => {
+    return Package.find({ creatorId: creatorMongooseId })
+                 .sort({ createdAt: -1 })
+                 .populate('creatorId', 'name email userId')
+                 // IMPORTANT: Populate courses with necessary fields for price calculation and display
+                 .populate<{ courses: ICourse[] }>('courses', 'title price courseId image');
+};

@@ -5,6 +5,7 @@ import { getLocalizedPrice, LocalizedPriceInfo } from '../services/pricingServic
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { AppError } from '../utils/AppError.js';
 import { ICourse } from '../models/Course.js'; // For typing populated courses
+import { IPackage } from '../models/Package.js'; // For typing packages
 
 async function getLocalizedPackageDetails(pkg: any, userLocation?: string) {
     const packageObject = pkg.toObject ? pkg.toObject() : { ...pkg };
@@ -70,4 +71,50 @@ export const deletePackageById = asyncHandler(async (req: Request, res: Response
     if (!req.user) throw new AppError('Authentication required to delete a package.', 401);
     await packageService.deletePackageService(req.params.packageId, req.user.id);
     res.status(204).json({ status: 'success', data: null });
+});
+
+
+export const getMyPackages = asyncHandler(async (req: Request, res: Response) => {
+    if (!req.user) throw new AppError('Authentication required.', 401);
+
+    const packagesFromDB = await packageService.getPackagesByCreatorIdService(req.user.id); // New service method
+
+    const userLocation = req.query.location as string | undefined;
+
+    if (userLocation && packagesFromDB.length > 0) {
+        const processedPackages = await Promise.all(
+            packagesFromDB.map(async (pkgDoc) => {
+                const pkg = pkgDoc.toObject ? pkgDoc.toObject() : { ...pkgDoc };
+
+                // Calculate base total price for this package
+                let baseTotalPriceUSD = 0;
+                if (pkg.courses && Array.isArray(pkg.courses) && pkg.courses.length > 0) {
+                    // This assumes courses are populated with their price. If not, you need to fetch them.
+                    // For `getPackagesByCreatorIdService`, ensure courses are populated with at least 'price'.
+                     baseTotalPriceUSD = (pkg.courses as ICourse[]).reduce((sum, course) => sum + (course.price || 0), 0);
+                }
+                pkg.baseTotalPriceUSD = baseTotalPriceUSD;
+
+                const localizedPriceInfo: LocalizedPriceInfo = await getLocalizedPrice(baseTotalPriceUSD, userLocation);
+                return { ...pkg, localizedPriceInfo };
+            })
+        );
+        return res.status(200).json({ status: 'success', results: processedPackages.length, data: processedPackages });
+    }
+
+    // If no location, or if backend doesn't auto-calculate baseTotalPriceUSD without location, do it here too for consistency.
+    const packagesWithBasePrice = packagesFromDB.map(pkgDoc => {
+        const pkg = pkgDoc.toObject ? pkgDoc.toObject() : { ...pkgDoc };
+        if (!pkg.baseTotalPriceUSD) { // Calculate if not already present
+            let baseTotalPriceUSD = 0;
+            if (pkg.courses && Array.isArray(pkg.courses) && pkg.courses.length > 0) {
+                 baseTotalPriceUSD = (pkg.courses as ICourse[]).reduce((sum, course) => sum + (course.price || 0), 0);
+            }
+            pkg.baseTotalPriceUSD = baseTotalPriceUSD;
+        }
+        return pkg;
+    });
+
+
+    res.status(200).json({ status: 'success', results: packagesWithBasePrice.length, data: packagesWithBasePrice });
 });
