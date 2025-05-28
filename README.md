@@ -1,5 +1,13 @@
 # Courseify Backend - Course Management System
 
+**Backend Endpoint: https://courseify-eight.vercel.app/**
+
+**Frontend: https://courseify25.vercel.app/**
+
+**Backend Repo: https://github.com/16SULPHUR/Guildup-Assignment-Backend/**
+
+**Frontend Repo: https://github.com/16SULPHUR/courseify**
+
 This is the backend for Courseify, a Course Management System built with Node.js, Express.js, and MongoDB. It provides APIs for managing users, courses, course packages, and includes features like location-based pricing and JWT authentication.
 
 ## Table of Contents
